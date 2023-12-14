@@ -56,15 +56,16 @@ router.post(
   requiredNotSent({ requiredParams: ["name", "description"] }),
   async (req, res, next) => {
     try {
+      console.log(req.body);
       const { name, description } = req.body;
-      const existingActivity = await getActivityByName(name, description);
+      const existingActivity = await getActivityByName(name);
       if (existingActivity) {
         next({
           name: "NotFound",
           message: `An activity with name ${name} already exists`,
         });
       } else {
-        const Activity = await createActivity(req.name, req.description);
+        const Activity = await createActivity(req.body);
         if (createActivity) {
           res.send(Activity);
         } else {
